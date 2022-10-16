@@ -1,5 +1,5 @@
 package dictor.query.commands;
 
-public class Put extends Command{
+public class PUT extends Command{
 
 }

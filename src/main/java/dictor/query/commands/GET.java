@@ -1,5 +1,5 @@
 package dictor.query.commands;
 
-public class Get extends Command{
+public class GET extends Command{
 
 }
