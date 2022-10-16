@@ -1,10 +1,15 @@
-package dictor.query.commands;
+package dictor.query;
 
+import dictor.query.commands.Command;
+import dictor.query.commands.GET;
+import dictor.query.commands.PUT;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class CommandManager{
 
@@ -24,5 +29,22 @@ public class CommandManager{
 
     private void addCommand(Class command) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException{
         commands.put(command.getSimpleName(), (Command) command.getDeclaredConstructor().newInstance());
+    }
+
+    public void execute(String query) {
+        if (StringUtils.isBlank(query)) {
+            throw new IllegalArgumentException("Query is empty!");
+        }
+
+        final String[] queryArgs = query.split(" ");
+        final String commandName = StringUtils.upperCase(queryArgs[0]);
+        final Command command = commands.get(commandName);
+
+        if (Objects.nonNull(command)) {
+            LOG.info("Command {} called with args: {}", commandName, queryArgs);
+            command.execute(queryArgs);
+        } else {
+            LOG.error("No command found with name: {}", commandName);
+        }
     }
 }

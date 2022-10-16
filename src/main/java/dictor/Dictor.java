@@ -1,10 +1,10 @@
 package dictor;
 
-import dictor.query.Parser;
-import dictor.query.commands.CommandManager;
+import dictor.query.CommandManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 public class Dictor{
@@ -13,10 +13,11 @@ public class Dictor{
     private static Dictor instance;
 
     private final CommandManager commandManager;
-    private final Parser queryParser;
+
+    private final HashMap<String, String> storage;
 
     public Dictor(){
-        queryParser = new Parser();
+        storage = new HashMap<>();
         commandManager = new CommandManager();
 
         LOG.info("Dictor initialized successfully!");
@@ -35,6 +36,14 @@ public class Dictor{
     }
 
     public void executeQuery(String query) {
-        queryParser.parse(query);
+        commandManager.execute(query);
+    }
+
+    public String getValue(String key) {
+        return storage.get(key);
+    }
+
+    public void putValue(String key, String value) {
+        this.storage.put(key, value);
     }
 }
