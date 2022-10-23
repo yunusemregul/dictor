@@ -1,6 +1,7 @@
 package dictor;
 
 import dictor.query.CommandManager;
+import dictor.query.QueryResult;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -35,8 +36,8 @@ public class Dictor{
         Dictor.instance = instance;
     }
 
-    public void executeQuery(String query) {
-        commandManager.execute(query);
+    public QueryResult executeQuery(String query) {
+        return commandManager.execute(query);
     }
 
     public String getValue(String key) {

@@ -1,5 +1,7 @@
 package dictor.query.commands;
 
+import dictor.query.QueryResult;
+
 public abstract class Command{
-    public abstract void execute(String[] args);
+    public abstract QueryResult execute(String[] args);
 }

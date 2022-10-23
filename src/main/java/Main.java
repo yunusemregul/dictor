@@ -14,7 +14,7 @@ public class Main{
         while(true) {
             String query = input.nextLine();
 
-            dictor.executeQuery(query);
+            LOG.info(dictor.executeQuery(query));
         }
     }
 }

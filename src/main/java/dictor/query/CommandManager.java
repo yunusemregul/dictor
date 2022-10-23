@@ -27,11 +27,11 @@ public class CommandManager{
         }
     }
 
-    private void addCommand(Class command) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException{
+    private void addCommand(final Class<?> command) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException{
         commands.put(command.getSimpleName(), (Command) command.getDeclaredConstructor().newInstance());
     }
 
-    public void execute(String query) {
+    public QueryResult execute(String query) {
         if (StringUtils.isBlank(query)) {
             throw new IllegalArgumentException("Query is empty!");
         }
@@ -42,9 +42,15 @@ public class CommandManager{
 
         if (Objects.nonNull(command)) {
             LOG.info("Command {} called with args: {}", commandName, queryArgs);
-            command.execute(queryArgs);
+            try {
+                return command.execute(queryArgs);
+            } catch (Exception e) {
+                return new QueryResult<>(e).withStatus(QueryResultStatus.NOK).withMessage(e.getMessage());
+            }
         } else {
             LOG.error("No command found with name: {}", commandName);
         }
+
+        return null;
     }
 }
