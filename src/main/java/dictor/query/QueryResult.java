@@ -52,6 +52,7 @@ public class QueryResult<T> {
                 "message='" + message + '\'' +
                 ", status=" + status +
                 ", result=" + result +
+                ", executionTime=" + executionTime +
                 '}';
     }
 }
