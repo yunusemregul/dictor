@@ -4,6 +4,7 @@ public class QueryResult<T> {
     private String message;
     private QueryResultStatus status;
     private T result;
+    private long executionTime;
 
     public QueryResult(T result) {
         this.result = result;
@@ -35,6 +36,14 @@ public class QueryResult<T> {
 
     public void setResult(T result) {
         this.result = result;
+    }
+
+    public long getExecutionTime() {
+        return executionTime;
+    }
+
+    public void setExecutionTime(long executionTime) {
+        this.executionTime = executionTime;
     }
 
     @Override

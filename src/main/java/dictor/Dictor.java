@@ -2,10 +2,10 @@ package dictor;
 
 import dictor.query.CommandManager;
 import dictor.query.QueryResult;
+import dictor.store.DictorMap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.HashMap;
 import java.util.Objects;
 
 public class Dictor{
@@ -15,10 +15,10 @@ public class Dictor{
 
     private final CommandManager commandManager;
 
-    private final HashMap<String, String> storage;
+    private final DictorMap storage;
 
     public Dictor(){
-        storage = new HashMap<>();
+        storage = new DictorMap();
         commandManager = new CommandManager();
 
         LOG.info("Dictor initialized successfully!");
@@ -37,7 +37,11 @@ public class Dictor{
     }
 
     public QueryResult executeQuery(String query) {
-        return commandManager.execute(query);
+        final long start = System.nanoTime();
+        final QueryResult result = commandManager.execute(query);
+        final long end = System.nanoTime();
+        result.setExecutionTime(end-start);
+        return result;
     }
 
     public String getValue(String key) {

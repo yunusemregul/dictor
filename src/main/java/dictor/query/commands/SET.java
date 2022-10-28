@@ -1,15 +1,14 @@
 package dictor.query.commands;
 
 import dictor.Dictor;
-import dictor.query.CommandManager;
 import dictor.query.QueryResult;
 import dictor.query.QueryResultStatus;
 import dictor.validator.MinimumNumberOfArgsValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class PUT extends Command{
-    private static final Logger LOG = LogManager.getLogger(PUT.class);
+public class SET extends Command{
+    private static final Logger LOG = LogManager.getLogger(SET.class);
     private final static int MINIMUM_NUMBER_OF_ARGUMENTS = 3;
 
     @Override

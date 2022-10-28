@@ -1,4 +1,5 @@
 import dictor.Dictor;
+import dictor.query.QueryResult;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -14,7 +15,9 @@ public class Main{
         while(true) {
             String query = input.nextLine();
 
-            LOG.info(dictor.executeQuery(query));
+            QueryResult result = dictor.executeQuery(query);
+
+            LOG.info("Query resulted with {} ({}ms), result is: {}", result.getStatus(), result.getExecutionTime()/1000, result.getResult());
         }
     }
 }

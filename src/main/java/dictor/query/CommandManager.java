@@ -2,7 +2,7 @@ package dictor.query;
 
 import dictor.query.commands.Command;
 import dictor.query.commands.GET;
-import dictor.query.commands.PUT;
+import dictor.query.commands.SET;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,36 +21,38 @@ public class CommandManager{
 
         try{
             addCommand(GET.class);
-            addCommand(PUT.class);
+            addCommand(SET.class);
         } catch(Exception e){
             LOG.error("Exception creating default commands, exception is: ", e);
         }
     }
 
     private void addCommand(final Class<?> command) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException{
-        commands.put(command.getSimpleName(), (Command) command.getDeclaredConstructor().newInstance());
+        Command commandInstance = (Command) command.getDeclaredConstructor().newInstance();
+        commands.put(StringUtils.lowerCase(command.getSimpleName()), commandInstance);
+        commands.put(StringUtils.upperCase(command.getSimpleName()), commandInstance);
     }
 
     public QueryResult execute(String query) {
-        if (StringUtils.isBlank(query)) {
+        if (query.length() == 0) {
             throw new IllegalArgumentException("Query is empty!");
         }
 
         final String[] queryArgs = query.split(" ");
-        final String commandName = StringUtils.upperCase(queryArgs[0]);
+        final String commandName = queryArgs[0];
         final Command command = commands.get(commandName);
 
         if (Objects.nonNull(command)) {
-            LOG.info("Command {} called with args: {}", commandName, queryArgs);
+            LOG.debug("Command {} called with args: {}", commandName, queryArgs);
             try {
                 return command.execute(queryArgs);
             } catch (Exception e) {
                 return new QueryResult<>(e).withStatus(QueryResultStatus.NOK).withMessage(e.getMessage());
             }
         } else {
-            LOG.error("No command found with name: {}", commandName);
+            final String message = String.format("No command found with name: %s", commandName);
+            LOG.error(message);
+            return new QueryResult<>(null).withStatus(QueryResultStatus.NOK).withMessage(message);
         }
-
-        return null;
     }
 }
