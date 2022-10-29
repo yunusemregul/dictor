@@ -2,6 +2,7 @@ package dictor.query;
 
 import dictor.query.commands.Command;
 import dictor.query.commands.GET;
+import dictor.query.commands.PING;
 import dictor.query.commands.SET;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -22,6 +23,7 @@ public class CommandManager{
         try{
             addCommand(GET.class);
             addCommand(SET.class);
+            addCommand(PING.class);
         } catch(Exception e){
             LOG.error("Exception creating default commands, exception is: ", e);
         }
@@ -35,7 +37,7 @@ public class CommandManager{
 
     public QueryResult execute(String query) {
         if (query.length() == 0) {
-            throw new IllegalArgumentException("Query is empty!");
+            return new QueryResult<>(null).withStatus(QueryResultStatus.NOK).withMessage("Query is empty!");
         }
 
         final String[] queryArgs = query.split(" ");

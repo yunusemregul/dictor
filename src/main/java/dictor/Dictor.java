@@ -25,11 +25,15 @@ public class Dictor{
     }
 
     public static Dictor getInstance(){
+        createInstance();
+
+        return instance;
+    }
+
+    public static void createInstance() {
         if (Objects.isNull(instance)) {
             instance = new Dictor();
         }
-
-        return instance;
     }
 
     public static void setInstance(Dictor instance){

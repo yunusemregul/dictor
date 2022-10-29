@@ -1,3 +1,4 @@
+import dictor.Dictor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -11,6 +12,7 @@ public class Server {
     private static final int PORT = 4141;
 
     public static void main(String[] args) {
+        Dictor.createInstance();
         ServerSocket serverSocket = null;
         Socket socket = null;
 
