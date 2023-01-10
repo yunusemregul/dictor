@@ -6,8 +6,6 @@ import dictor.store.DictorMap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Objects;
-
 public class Dictor{
     private final Logger LOG = LogManager.getLogger(Dictor.class);
 
@@ -31,13 +29,9 @@ public class Dictor{
     }
 
     public static void createInstance() {
-        if (Objects.isNull(instance)) {
+        if (instance == null) {
             instance = new Dictor();
         }
-    }
-
-    public static void setInstance(Dictor instance){
-        Dictor.instance = instance;
     }
 
     public QueryResult executeQuery(String query) {

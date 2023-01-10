@@ -1,9 +1,12 @@
 import dictor.Dictor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.net.Socket;
 
 public class ClientHandler extends Thread {
+    private static final Logger LOG = LogManager.getLogger(ClientHandler.class);
     private final Socket socket;
     private final Dictor dictor;
 
@@ -13,6 +16,8 @@ public class ClientHandler extends Thread {
     }
 
     public void run() {
+        LOG.info("Thread with id {} started!", this.getId());
+
         InputStream inputStream;
         BufferedReader reader;
         DataOutputStream outputStream;
@@ -33,15 +38,17 @@ public class ClientHandler extends Thread {
 
                 if ((line == null) || line.equalsIgnoreCase("QUIT")) {
                     socket.close();
-                    return;
+                    break;
                 } else {
                     outputStream.writeBytes(dictor.executeQuery(line) + "\n\r");
                     outputStream.flush();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-                return;
+                break;
             }
         }
+
+        LOG.info("Thread with id {} died!", this.getId());
     }
 }
