@@ -13,8 +13,7 @@ public class Server {
 
     public static void main(String[] args) {
         Dictor.createInstance();
-        ServerSocket serverSocket = null;
-        Socket socket = null;
+        ServerSocket serverSocket;
 
         try {
             serverSocket = new ServerSocket(PORT);
@@ -25,12 +24,11 @@ public class Server {
 
         while (true) {
             try {
-                socket = serverSocket.accept();
+                Socket socket = serverSocket.accept();
+                new ClientHandler(socket).start();
             } catch (IOException e) {
                 LOG.error(e);
             }
-
-            new ClientHandler(socket).start();
         }
     }
 }

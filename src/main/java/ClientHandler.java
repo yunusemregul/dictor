@@ -5,20 +5,22 @@ import java.net.Socket;
 
 public class ClientHandler extends Thread {
     private final Socket socket;
+    private final Dictor dictor;
 
     public ClientHandler(Socket socket) {
         this.socket = socket;
+        this.dictor = Dictor.getInstance();
     }
 
     public void run() {
-        InputStream inp = null;
-        BufferedReader brinp = null;
-        DataOutputStream out = null;
+        InputStream inputStream;
+        BufferedReader reader;
+        DataOutputStream outputStream;
 
         try {
-            inp = socket.getInputStream();
-            brinp = new BufferedReader(new InputStreamReader(inp));
-            out = new DataOutputStream(socket.getOutputStream());
+            inputStream = socket.getInputStream();
+            reader = new BufferedReader(new InputStreamReader(inputStream));
+            outputStream = new DataOutputStream(socket.getOutputStream());
         } catch (IOException e) {
             return;
         }
@@ -27,14 +29,14 @@ public class ClientHandler extends Thread {
 
         while (true) {
             try {
-                line = brinp.readLine();
+                line = reader.readLine();
 
                 if ((line == null) || line.equalsIgnoreCase("QUIT")) {
                     socket.close();
                     return;
                 } else {
-                    out.writeBytes(Dictor.getInstance().executeQuery(line) + "\n\r");
-                    out.flush();
+                    outputStream.writeBytes(dictor.executeQuery(line) + "\n\r");
+                    outputStream.flush();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
