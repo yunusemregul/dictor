@@ -1,3 +1,5 @@
+package slave;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,6 +20,7 @@ public class Server extends Thread {
 
     @Override
     public void run() {
+        LOG.info("Slave server with id {} started to listen at port {}!", this.getId(), port);
         ServerSocket serverSocket;
 
         try {
@@ -43,5 +46,7 @@ public class Server extends Thread {
         } catch (IOException e) {
             LOG.error(e);
         }
+
+        LOG.info("Slave server with id {} ended!", this.getId());
     }
 }

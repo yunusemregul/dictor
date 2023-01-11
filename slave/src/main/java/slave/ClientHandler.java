@@ -1,3 +1,5 @@
+package slave;
+
 import dictor.Dictor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -37,6 +39,8 @@ public class ClientHandler extends Thread {
                 line = reader.readLine();
 
                 if ((line == null) || line.equalsIgnoreCase("QUIT")) {
+                    inputStream.close();
+                    outputStream.close();
                     socket.close();
                     break;
                 } else {
