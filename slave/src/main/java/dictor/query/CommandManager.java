@@ -1,9 +1,6 @@
 package dictor.query;
 
-import dictor.query.commands.Command;
-import dictor.query.commands.GET;
-import dictor.query.commands.PING;
-import dictor.query.commands.SET;
+import dictor.query.commands.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,10 +17,13 @@ public class CommandManager{
     public CommandManager(){
         commands = new HashMap<>();
 
-        try{
+        try {
             addCommand(GET.class);
             addCommand(SET.class);
             addCommand(PING.class);
+            addCommand(EXISTS.class);
+            addCommand(APPEND.class);
+            addCommand(DEL.class);
         } catch(Exception e){
             LOG.error("Exception creating default commands, exception is: ", e);
         }
@@ -35,9 +35,9 @@ public class CommandManager{
         commands.put(StringUtils.upperCase(command.getSimpleName()), commandInstance);
     }
 
-    public QueryResult execute(String query) {
+    public String execute(String query) {
         if (query.length() == 0) {
-            return new QueryResult<>(null).withStatus(QueryResultStatus.NOK).withMessage("Query is empty!");
+            return ResponseType.ERROR + "Query is empty!";
         }
 
         final String[] queryArgs = query.split(" ");
@@ -49,12 +49,12 @@ public class CommandManager{
             try {
                 return command.execute(queryArgs);
             } catch (Exception e) {
-                return new QueryResult<>(e).withStatus(QueryResultStatus.NOK).withMessage(e.getMessage());
+                return ResponseType.ERROR + e.getMessage();
             }
         } else {
             final String message = String.format("No command found with name: %s", commandName);
             LOG.error(message);
-            return new QueryResult<>(null).withStatus(QueryResultStatus.NOK).withMessage(message);
+            return ResponseType.ERROR + message;
         }
     }
 }

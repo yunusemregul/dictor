@@ -4,9 +4,7 @@ import dictor.Dictor;
 import dictor.query.Command;
 import dictor.query.ResponseType;
 
-import java.util.Objects;
-
-public class GET extends Command {
+public class EXISTS extends Command {
     private final static int MINIMUM_NUMBER_OF_ARGUMENTS = 2;
 
     @Override
@@ -15,13 +13,6 @@ public class GET extends Command {
             return ResponseType.ERROR + "Minimum number of " + MINIMUM_NUMBER_OF_ARGUMENTS + " arguments needed!";
         }
 
-        String key = args[1];
-        String result = Dictor.getInstance().getValue(key);
-
-        if (Objects.isNull(result)) {
-            return ResponseType.ERROR + String.format("No value found with key %s", key);
-        }
-
-        return ResponseType.TEXT + result;
+        return ResponseType.INTEGER + (Dictor.getInstance().contains(args[1]) ? "1" : "0");
     }
 }

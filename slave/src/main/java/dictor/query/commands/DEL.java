@@ -4,9 +4,7 @@ import dictor.Dictor;
 import dictor.query.Command;
 import dictor.query.ResponseType;
 
-import java.util.Objects;
-
-public class GET extends Command {
+public class DEL extends Command {
     private final static int MINIMUM_NUMBER_OF_ARGUMENTS = 2;
 
     @Override
@@ -15,13 +13,14 @@ public class GET extends Command {
             return ResponseType.ERROR + "Minimum number of " + MINIMUM_NUMBER_OF_ARGUMENTS + " arguments needed!";
         }
 
-        String key = args[1];
-        String result = Dictor.getInstance().getValue(key);
+        int deletedCount = 0;
 
-        if (Objects.isNull(result)) {
-            return ResponseType.ERROR + String.format("No value found with key %s", key);
+        for (int i = 1; i < args.length; i++) {
+            if (Dictor.getInstance().delete(args[1]) != null) {
+                deletedCount += 1;
+            }
         }
 
-        return ResponseType.TEXT + result;
+        return ResponseType.INTEGER.toString() + deletedCount;
     }
 }
